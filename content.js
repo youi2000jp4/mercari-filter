@@ -1,34 +1,43 @@
-// メルカリ検索を「新しい順・個人出品」に自動設定 v1.1
-function injectParams(urlStr) {
-  const url = new URL(urlStr, location.href);
-  if (!url.pathname.startsWith("/search")) return urlStr;
-
-  url.searchParams.set("sort", "created_time");
-  url.searchParams.set("order", "desc");
-  url.searchParams.set("item_types", "1");
-  return url.toString();
-}
-
+// メルカリ検索を「新しい順・個人出品」に自動設定 v1.3
 function applyFilter() {
-  const fixed = injectParams(location.href);
-  if (fixed !== location.href) {
-    location.replace(fixed);
+  const url = new URL(location.href);
+  if (!url.pathname.startsWith("/search")) return;
+
+  const params = url.searchParams;
+  let changed = false;
+
+  if (params.get("sort") !== "created_time" || params.get("order") !== "desc") {
+    params.set("sort", "created_time");
+    params.set("order", "desc");
+    changed = true;
+  }
+
+  if (params.get("item_types") !== "1") {
+    params.set("item_types", "1");
+    changed = true;
+  }
+
+  if (changed) {
+    location.replace(url.toString());
   }
 }
 
 // 初回実行
 applyFilter();
 
-// SPA対応：history APIを乗っ取ってURLが変わる前にパラメータを注入
+// SPA対応：pushState のみ乗っ取る（replaceState は触らない）
 const _push = history.pushState.bind(history);
-const _replace = history.replaceState.bind(history);
-
 history.pushState = function (state, title, url) {
-  _push(state, title, url ? injectParams(url) : url);
-};
-
-history.replaceState = function (state, title, url) {
-  _replace(state, title, url ? injectParams(url) : url);
+  if (url) {
+    const u = new URL(url, location.href);
+    if (u.pathname.startsWith("/search")) {
+      u.searchParams.set("sort", "created_time");
+      u.searchParams.set("order", "desc");
+      u.searchParams.set("item_types", "1");
+      return _push(state, title, u.toString());
+    }
+  }
+  return _push(state, title, url);
 };
 
 window.addEventListener("popstate", applyFilter);
