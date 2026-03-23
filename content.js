@@ -12,8 +12,8 @@ function applyFilter() {
     changed = true;
   }
 
-  if (params.get("item_types") !== "1") {
-    params.set("item_types", "1");
+  if (params.get("item_types") !== "mercari") {
+    params.set("item_types", "mercari");
     changed = true;
   }
 
@@ -33,7 +33,7 @@ history.pushState = function (state, title, url) {
     if (u.pathname.startsWith("/search")) {
       u.searchParams.set("sort", "created_time");
       u.searchParams.set("order", "desc");
-      u.searchParams.set("item_types", "1");
+      u.searchParams.set("item_types", "mercari");
       return _push(state, title, u.toString());
     }
   }
