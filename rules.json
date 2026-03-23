@@ -4,7 +4,7 @@
     "priority": 2,
     "action": { "type": "allow" },
     "condition": {
-      "regexFilter": "jp\\.mercari\\.com/search.*item_types=mercari",
+      "regexFilter": "jp\\.mercari\\.com/search.*status=sold_out",
       "resourceTypes": ["main_frame"]
     }
   },
@@ -19,7 +19,9 @@
             "addOrReplaceParams": [
               { "key": "sort", "value": "created_time" },
               { "key": "order", "value": "desc" },
-              { "key": "item_types", "value": "mercari" }
+              { "key": "item_types", "value": "mercari" },
+              { "key": "status", "value": "sold_out" },
+              { "key": "price_min", "value": "3000" }
             ]
           }
         }
