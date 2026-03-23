@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "priority": 2,
+    "action": { "type": "allow" },
+    "condition": {
+      "regexFilter": "jp\\.mercari\\.com/search.*item_types=mercari",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": {
+          "queryTransform": {
+            "addOrReplaceParams": [
+              { "key": "sort", "value": "created_time" },
+              { "key": "order", "value": "desc" },
+              { "key": "item_types", "value": "mercari" }
+            ]
+          }
+        }
+      }
+    },
+    "condition": {
+      "urlFilter": "jp.mercari.com/search",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]
